@@ -1,9 +1,12 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const dbConnect = require('./config/dbConnect');         //ou bien require('./config/dbConnect')();
-const User = require('./models/User');
 const usersRoute =require('./routes/usersRoute');
+const archivesRouter =require('./routes/archivesRoute');
 const error =require('./middlewares/errorMiddlewareHandler');
+
+dotenv.config();
+
 const app = express(); 
 
 
@@ -16,7 +19,10 @@ dbConnect();
 
 
 //routes
+//userRoutes
 app.use('/api/users',usersRoute);
+//archiveRoutes
+app.use('/api/archives',archivesRouter);
 
 
 //Error middelware
@@ -28,4 +34,3 @@ const PORT =process.env.PORT || 5000 ;
 app.listen(PORT, () =>{
     console.log('Server is up and runing ');
 });
-

@@ -1,6 +1,9 @@
 const express =require ('express');
 const asynHandler = require('express-async-handler');
+const expressAsyncHandler = require('express-async-handler');
+const authMiddleware = require('../middlewares/authMiddleware');
 const User =require('../models/User');
+const generateToken = require('../utils/generateToken');
 const usersRoute = express.Router();   //instance of express router
 
 
@@ -17,7 +20,14 @@ usersRoute.post(
     }
     const userCreated = await User.create({email, name, password});
 
-    res.send(userCreated);
+    
+    res.json({
+      _id: userCreated._id ,
+      name: userCreated.name ,
+      password: userCreated.password,
+      email: userCreated.password,
+      token: generateToken(userCreated._id),
+      });
 
 }));
 
@@ -26,22 +36,23 @@ usersRoute.post(
 
 //login
 usersRoute.post(
-           '/login',
+           '/login', authMiddleware,
             asynHandler(async (req, res) => {
 
-    const { email, password} = req.body;
-    //var email = req.body.email;
-    //var password = req.body.password;
-    const user = await User.findOne({ email });
+            const { email, password} = req.body;
+            const user = await User.findOne({ email });
    
-    if (user) {
+
+    if (user && await user.isPasswordMatch(password) ) {
+
       res.status(200);
 
       res.json({
       _id: user._id ,
       name: user.name ,
       password: user.password,
-      email: user.email
+      email: user.password,
+      token: generateToken(user._id),
       });
 
      } else {
@@ -52,24 +63,52 @@ usersRoute.post(
      }));
 
 
-//Update User
-usersRoute.put('/update',(req,res)=> {
-    res.send('update route'); 
-  });
-  
+//update user
+usersRoute.put(
+  '/update', authMiddleware,
+  expressAsyncHandler(async (req, res) => {
+    //Find the login user by ID
+    const user = await User.findById(req.user._id);
 
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      if (req.body.password) {
+        user.password = req.body.password || user.password;
+      }
 
-  //Delete User
-  usersRoute.delete('/:id',(req,res)=> {
-    res.send('delete route');
-  });
-  
+      const updatedUser = await user.save();
 
-  
-//fetch user
-usersRoute.get('/',(req,res)=> {
-    res.send('fetch users');
-  });
-  
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        token: generateToken(updatedUser._id),
+      });
+    }
+  })
+);
+
+//Delete user
+usersRoute.delete('/:id', (req, res) => {
+  res.send('Delete route');
+});
+
+//fetch Users
+usersRoute.get(
+  '/',
+  authMiddleware,
+  expressAsyncHandler(async (req, res) => {
+    const users = await User.find({});
+
+    if (users) {
+      res.status(200).json(users);
+    } else {
+      res.status(500);
+
+      throw new Error('No users found at the moment');
+    }
+  })
+);
 
 module.exports = usersRoute;
