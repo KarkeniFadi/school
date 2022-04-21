@@ -1,32 +1,47 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createArchiveReducer } from '../reducer/archives/createArchiveReducer';
-import { archiveListReducer } from '../reducer/archives/archiveListReducer';
-//import { userReducer } from '../reducer/users/userAuthReducer';
+import userReducer from '../reducer/users/userAuthReducer';
+import userProfileReducer from '../reducer/users/userProfileReducer';
+import userUpdateReducer from '../reducer/users/userUpdateReducer';
+import createdArchiveReducer from '../reducer/archives/createdArchiveReducer';
+import archiveListReducer from '../reducer/archives/archiveListReducer';
+import archiveDetailReducer from '../reducer/archives/archiveDetailsReducer';
+import usersListReducer from '../reducer/users/usersListReducer';
 
-const middlewares = [thunk];
+const middleware = [thunk];
 
 const reducer = combineReducers({
-  archiveCreated: createArchiveReducer,
+  userLogin: userReducer,
+  userProfile: userProfileReducer,
+  updatedUser: userUpdateReducer,
+  archiveCreated: createdArchiveReducer,
   archivesList: archiveListReducer,
-  //userLogin: userReducer, //login/register
+  archiveDetails: archiveDetailReducer,
+  usersList: usersListReducer,
 });
 
-//Get user from localstorage and save it into our store
 
-//const userAuthFromStorage = localStorage.getItem('userAuthData')
-  //? JSON.parse(localStorage.getItem('userAuthData'))
-  //: null;
+//store
+//Initial state
 
-//const initialState = {
-  //userLogin: { userInfo: userAuthFromStorage },
-//};
+//This is the initial state for all the reducers. NOTE the keys of the reducers above must be the same as the one you will pass as initialstate
+//The key must be the same and secondly look at the way the structure of the data in the store
+
+//Get the user in local storage
+
+const userAuthFromStorage = localStorage.getItem('userAuthData')
+  ? JSON.parse(localStorage.getItem('userAuthData'))
+  : null;
+
+const initialState = {
+  userLogin: { userInfo: userAuthFromStorage },
+};
 
 const store = createStore(
   reducer,
-  //initialState,
-  composeWithDevTools(applyMiddleware(...middlewares))
+  initialState,
+  composeWithDevTools(applyMiddleware(...middleware))
 );
 
-export { store };
+export default store;

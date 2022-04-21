@@ -1,29 +1,28 @@
 import {
-  CREATE_ARCHIVE_FAIL,
-  CREATE_ARCHIVE_REQUEST,
-  CREATE_ARCHIVE_SUCCESS,
+    ARCHIVE_DETAIL_FAIL,
+  ARCHIVE_DETAIL_REQUEST,
+  ARCHIVE_DETAIL_SUCCESS,
 } from '../../action/actionTypes';
 
-const createArchiveReducer = (state = {}, action) => {
+const archiveDetailReducer = (state = {}, action) => {
   switch (action.type) {
-    case CREATE_ARCHIVE_REQUEST:
+    case ARCHIVE_DETAIL_REQUEST:
       return {
         loading: true,
       };
-    case CREATE_ARCHIVE_SUCCESS:
+    case ARCHIVE_DETAIL_SUCCESS:
       return {
         archive: action.payload,
+        loading: false,
       };
-
-    case CREATE_ARCHIVE_FAIL:
+    case ARCHIVE_DETAIL_FAIL:
       return {
         loading: false,
         error: action.payload,
       };
-
     default:
       return state;
   }
 };
 
-export { createArchiveReducer };
+export default archiveDetailReducer;

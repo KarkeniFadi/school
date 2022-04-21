@@ -11,7 +11,7 @@ const archiveSchema = new mongoose.Schema(
     },
      picture: {
         type: String,
-        required:true,
+        //required:true,
       },
 
       role: {
@@ -25,9 +25,6 @@ const archiveSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-
-
 
 const Archive = mongoose.model('Archive', archiveSchema);
 

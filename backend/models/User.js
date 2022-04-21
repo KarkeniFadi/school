@@ -1,17 +1,12 @@
 const mongoose =require('mongoose');
 const bcrypt=require('bcryptjs');
 
-
-const Role = {
-    admin : 'Admin',
-    cadre_pedago : 'cadre_pedagogique'
-};
 //schema
 
 const UserSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: true,
+      required: true,
     },
     lastName: {
         type: String,
@@ -40,7 +35,11 @@ const UserSchema = new mongoose.Schema({
 
 
 
-UserSchema.pre('save',async function(next){             //before the s  ve we can do so , save is the name of middelware and a function to run 
+UserSchema.pre('save',async function(next){  
+    if (!this.isModified('password')) {
+        next();
+      }
+                                                    //before the s  ve we can do so , save is the name of middelware and a function to run 
     const salt =await bcrypt.genSalt(10);               // next : to next middelware     10 nbre de tour generer le tri
     this.password=await bcrypt.hash(this.password, salt);  // pass la9dim t3ayatlou lel saltu
     next();

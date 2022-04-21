@@ -12,20 +12,22 @@ usersRoute.post(
     '/register',
     asynHandler(async (req, res) => {
 
-    const { name, email, password } = req.body;
+    const { firstName,lastName, email, password ,role} = req.body;
     const userExists = await User.findOne({email: email});
 
     if (userExists) {
         throw new Error('User Exist');
     }
-    const userCreated = await User.create({email, name, password});
+    const userCreated = await User.create({ firstName,lastName, email, password ,role});
 
     
     res.json({
       _id: userCreated._id ,
-      name: userCreated.name ,
+      firstName: userCreated.firstName ,
+      lastName: userCreated.lastName ,
       password: userCreated.password,
       email: userCreated.password,
+      role: userCreated.role ,
       token: generateToken(userCreated._id),
       });
 
@@ -49,9 +51,11 @@ usersRoute.post(
 
       res.json({
       _id: user._id ,
-      name: user.name ,
+      lastName: user.lastName ,
+      firstName: user.firstName ,
       password: user.password,
       email: user.password,
+      role: user.role,
       token: generateToken(user._id),
       });
 
@@ -71,7 +75,8 @@ usersRoute.put(
     const user = await User.findById(req.user._id);
 
     if (user) {
-      user.name = req.body.name || user.name;
+      user.lastName = req.body.lastName || user.lastName;
+      user.firstName = req.body.firstName || user.firstName;
       user.email = req.body.email || user.email;
       if (req.body.password) {
         user.password = req.body.password || user.password;
@@ -81,7 +86,8 @@ usersRoute.put(
 
       res.json({
         _id: updatedUser._id,
-        name: updatedUser.name,
+        lastName: updatedUser.lastName,
+        firstName: updatedUser.firstName,
         email: updatedUser.email,
         token: generateToken(updatedUser._id),
       });

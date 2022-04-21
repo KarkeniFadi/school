@@ -25,5 +25,5 @@ import {
         return state;
     }
   };
-  
-  export { archiveListReducer };
+ 
+  export default archiveListReducer ;
