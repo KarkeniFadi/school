@@ -45,13 +45,13 @@ export const registerUser = (firstName,lastName, email, password,role) => {
         },
         config
       );
-
       dispatch({
         type: USER_REGISTER_SUCCESS,
         payload: data,
       });
 
       //Save the user into localstorage
+      
       localStorage.setItem('userAuthData', JSON.stringify(data));
     } catch (error) {
       dispatch({

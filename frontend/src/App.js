@@ -17,15 +17,15 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-        <Route exact path='/' element={<Home />} />
-        <Route exact path='/register' element={<Register />} />
-        <Route exact path='/login' element={<Login />} />
-        <Route exact path='/profile' element={<Profile/>} />
-        <Route exact path='/archives' element={<Archives />} />
-        <Route exact path='/addArchive' element={<AddArchive />} />
-        <Route exact path='/user-update' element={<UpdateProfile />} />
-        <Route exact path='/archive/:id' element={<ArchiveDetail />} />
-        <Route exact path='/users' element={<Users />} />
+        <Route  path='/' element={<Home />} />
+        <Route  path='/register' element={<Register />} />
+        <Route  path='/login' element={<Login />} />
+        <Route  path='/profile' element={<Profile/>} />
+        <Route  path='/archives' element={<Archives />} />
+        <Route  path='/addArchive' element={<AddArchive />} />
+        <Route path='/user-update' element={<UpdateProfile />} />
+        <Route path='/archive/:id' element={<ArchiveDetail />} />
+        <Route  path='/users' element={<Users />} />
         </Routes>
       </BrowserRouter>
     </>

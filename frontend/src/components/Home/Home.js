@@ -7,12 +7,12 @@ const Home = () => {
   return (
     <div className='Container'>
 
-        Your browser does not support the video tag.
+   
 
       <div className='Content'>
         <div className='SubContent'>
-          <h1>Book Catolog</h1>
-          <p>Manage your Books with Ease</p>
+          <h1>Archive Catolog</h1>
+          <p>Manage your Archive with </p>
           <button type='button' className='btn btn-outline-dark'>
             <Link to='/register'>Get started</Link>
           </button>

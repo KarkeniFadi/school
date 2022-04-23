@@ -24,14 +24,15 @@ export const createArchive = archiveData => {
     try {
       dispatch({
         type: CREATE_ARCHIVE_REQUEST,
-        loading: true,
+       
       });
       const config = {
-        headers: {
+        
           'Content-Type': 'application/json',
-        },
+        
       };
-      const { data } = await axios.post('/api/archives', archiveData, config);
+      const { data } = await axios.post('/api/archives', 
+      archiveData, config);
 
       dispatch({
         type: CREATE_ARCHIVE_SUCCESS,

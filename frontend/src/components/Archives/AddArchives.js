@@ -1,32 +1,39 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { createArchive } from '../../redux/action/archives/archiveActions';
+import { useNavigate } from "react-router-dom";
 
- 
-  const AddArchive = ({ history }) => {
-    const [fullName, setName] = useState('');
-  const [picture, setPicture] = useState('');
-  const [role, setRole] = useState('');
+
+const AddArchive = () => {
   
-    //Get the user id from store
+
+  const [fullName, setName] = useState('');
+const [picture, setPicture] = useState('');
+const [role, setRole] = useState('');
+
+  //Get the user id from store 
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
+
+
   
-    const userLogin = useSelector(state => state.userLogin);
+  //dispatch action
+
+  const history = useNavigate();
+
+  const dispatch = useDispatch(); 
   
-    const { userInfo } = userLogin;
-    console.log(userInfo._id);
-    //dispatch action
-    const dispatch = useDispatch();
-  
-    const formSubmitHandler = e => {
-      const data = {
-        fullName,
-        picture,
-        role,
-      };
-      e.preventDefault();
-      dispatch(createArchive(data));
-      history.push('/archives');
+  const formSubmitHandler = e => {
+    e.preventDefault();
+    
+    const data = {
+      fullName,
+      picture,
+      role,
     };
+    dispatch(createArchive(data));
+    history('/archives');
+  };
 
   return (
     <div className='row container-height'>
@@ -37,7 +44,7 @@ import { createArchive } from '../../redux/action/archives/archiveActions';
             className='btn btn-primary'
             data-toggle='modal'
             data-target='#exampleModal'>
-            Click to add Archive.
+            Click to add Archive
           </button>
 
           <div
@@ -64,42 +71,51 @@ import { createArchive } from '../../redux/action/archives/archiveActions';
                   <h1 className='text-center'>Add Archive</h1>
                   <form onSubmit={formSubmitHandler}>
                     <fieldset>
+
+
                     <div className='form-group'>
-                        <label htmlFor='exampleInputPassword1'>full Name</label>
+                        <label htmlFor='name'>full Name</label>
                         <input
                           value={fullName}
-                          onChange={e => setName(e.target.value)}
+                          onChange={(e) => setName(e.target.value)}
                           type='text'
                           className='form-control'
-                          id='exampleInputPassword1'
+                          id='name'
+                          name='fullName'
                           placeholder='Full Name'
                         />
                       </div>
+
+
                       <div className='form-group'>
-                        <label htmlFor='exampleInputEmail1'>photo</label>
+                        <label htmlFor='picture'>Picture</label>
                         <input
                           value={picture}
-                          onChange={e => setPicture(e.target.value)}
+                          onChange={(e) => setPicture(e.target.value)}
                           type='text'
                           className='form-control'
-                          id='exampleInputEmail1'
+                          id='picture'
                           aria-describedby='emailHelp'
                           placeholder='photo'
                         />
-                      </div>
+                      </div> 
 
-                      
+
                       <div className='form-group'>
                         <label htmlFor='exampleInputEmail1'>Role</label>
-                      <select
+                       <select
                           value={role}
                           onChange={e => setRole(e.target.value)}
                           className='custom-select'>
-                          <option value='students'>Students</option>
+                            <option defaultValue='Students'>
+                            Students
+                          </option>
                           <option value='teacher'>Teacher</option>
                           <option value='administration'>Administrative</option>
                         </select>
-                        </div>
+                      </div>
+
+
                       <button type='submit' className='btn btn-warning m-auto'>
                         Create Archive
                       </button>

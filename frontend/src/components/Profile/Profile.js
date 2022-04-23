@@ -22,26 +22,26 @@ const Profile = ({ history }) => {
   const userProfile = useSelector(state => state.userProfile);
   const { loading, user } = userProfile;
 
-  const books = userProfile.user && userProfile.user.books;
+  const archives = userProfile.user && userProfile.user.archives;
 
   const renderTable = () => {
-    if (books) {
+    if (archives) {
       return (
         <table className='table table-hover'>
           <thead>
             <tr>
               <th scope='col'>Author</th>
-              <th scope='col'>Book Name</th>
+              <th scope='col'>Archive Name</th>
               <th scope='col'>Delete</th>
               <th scope='col'>Update</th>
             </tr>
           </thead>
           <tbody>
-            {books.map(book => {
+            {archives.map(archive => {
               return (
-                <tr className='table-dark' key={book._id}>
-                  <th scope='row'>{book.author}</th>
-                  <td>{book.title}</td>
+                <tr className='table-dark' key={archive._id}>
+                  <th scope='row'>{archive.fullName}</th>
+                  <td>{archive.role}</td>
                   <td>Delete</td>
                   <td>Update</td>
                 </tr>

@@ -3,12 +3,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/action/users/usersActions';
 
-const Header = () => {
+
+
+const Header = props => {
+
+
+  const navigate = useNavigate();
+  
   const dispatch = useDispatch();
   
-  const navigate = useNavigate();
-  const userLogin = useSelector(state => state.userLogin);
-  const { userInfo } = userLogin;
+
+
+  const state= useSelector(state => state.userLogin);
+  console.log(state);
+  //const { userInfo } = userLogin;
 
   //logout handler
 
@@ -16,6 +24,7 @@ const Header = () => {
     dispatch(logoutUser());
     navigate('/');
   };
+  const { userInfo, loading, error } = state;
   return (
     <header>
       <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
@@ -77,14 +86,15 @@ const Header = () => {
                           <i
                             className='fas fa-clipboard-list text-white mr-3'
                             style={{ fontSize: '1.5rem' }}></i>
-                          Register User
+
+                          <a href="/register" >Register User</a>
                           <hr />
                         </li>
                         <li className='list-group-item'>
                           <i
                             className='fas fa-clipboard-list text-white mr-3'
                             style={{ fontSize: '1.5rem' }}></i>
-                          Update Profile
+                          <a href="/profile" >Update profile</a>
                           <hr />
                         </li>
 
@@ -92,37 +102,26 @@ const Header = () => {
                           <i
                             className='fas fa-clipboard-list text-white mr-3'
                             style={{ fontSize: '1.5rem' }}></i>
-                          Login
+                          <a href="/login" >Login</a>
+                          <hr />
+                        </li>
+                        
+                        <li className='list-group-item'>
+                          <i
+                            className='fas fa-clipboard-list text-white mr-3'
+                            style={{ fontSize: '1.5rem' }}></i>
+                          <a href="/users" >List of Users</a>
                           <hr />
                         </li>
                         <li className='list-group-item'>
                           <i
                             className='fas fa-clipboard-list text-white mr-3'
                             style={{ fontSize: '1.5rem' }}></i>
-                          User Dashboard
+                            <a href="/archives" >List of Archives</a>
+                          
                           <hr />
                         </li>
-                        <li className='list-group-item'>
-                          <i
-                            className='fas fa-clipboard-list text-white mr-3'
-                            style={{ fontSize: '1.5rem' }}></i>
-                          List of Users
-                          <hr />
-                        </li>
-                        <li className='list-group-item'>
-                          <i
-                            className='fas fa-clipboard-list text-white mr-3'
-                            style={{ fontSize: '1.5rem' }}></i>
-                          List of Archives
-                          <hr />
-                        </li>
-                        <li className='list-group-item'>
-                          <i
-                            className='fas fa-clipboard-list text-white mr-3'
-                            style={{ fontSize: '1.5rem' }}></i>
-                          Many more
-                          <hr />
-                        </li>
+                      
                       </ul>
                     </div>
                     <div className='modal-footer'>
@@ -144,15 +143,32 @@ const Header = () => {
               </div>
             </li>
 
-            {userInfo ? (
-              <>
+            {!userInfo ? (    //if there is no user show it
+          
+          <>
+                <li className='nav-item'>
+                  <Link className='nav-link' to='../login'>
+                    Login
+                  </Link>
+                </li>
+               
+              </>
+             
+            ) : (
+
+               <>
+                <li className='nav-item'>
+                  <Link className='nav-link' to='/register'>
+                    Register
+                  </Link>
+                </li>
                 <li className='nav-item'>
                   <Link className='nav-link' to='/archives'>
                     Archives
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link' to='/addArchive'>
+                  <Link className='nav-link' to='/addarchive'>
                     Add archive
                   </Link>
                 </li>
@@ -168,19 +184,6 @@ const Header = () => {
                     to='/login'
                     onClick={() => dispatch(logoutUser())}>
                     Logout
-                  </Link>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className='nav-item'>
-                  <Link className='nav-link' to='../Login'>
-                    Login
-                  </Link>
-                </li>
-                <li className='nav-item'>
-                  <Link className='nav-link' to='/Register'>
-                    Register
                   </Link>
                 </li>
               </>

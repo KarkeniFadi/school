@@ -9,7 +9,7 @@ const usersRoute = express.Router();   //instance of express router
 
 //Register
 usersRoute.post(
-    '/register',
+    "/register",
     asynHandler(async (req, res) => {
 
     const { firstName,lastName, email, password ,role} = req.body;
@@ -51,10 +51,10 @@ usersRoute.post(
 
       res.json({
       _id: user._id ,
-      lastName: user.lastName ,
       firstName: user.firstName ,
-      password: user.password,
+      lastName: user.lastName ,
       email: user.password,
+      password: user.password,
       role: user.role,
       token: generateToken(user._id),
       });

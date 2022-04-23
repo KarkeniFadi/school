@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './Register.css';
 import { registerUser } from '../../redux/action/users/usersActions';
 import Loading from '../Loading/Loading';
 import ErrorMessage from '../DisplayMessage/ErrorMessage';
+import { useNavigate } from 'react-router-dom';
 
 
 const Register = ({ history }) => {
@@ -16,18 +17,29 @@ const Register = ({ history }) => {
   const userLogin = useSelector(state => state.userLogin);
     const { userInfo, loading, error } = userLogin;
   
+ const navigate = useNavigate();
+
+
+  //Redirect if user is login/authenticated
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [userInfo,navigate]);
+
+
     //dispatch
     const dispatch = useDispatch();
     //submit
     const formSubmitHandler = e => {
       e.preventDefault();
-      dispatch(registerUser(firstName,lastName, email, password,role));
-      console.log(userInfo, loading, error);
-      if (userInfo !== null && error === undefined) history.push('/');
+      dispatch(registerUser(firstName, lastName, email, password,role));
+      //if (userInfo !== null && error === undefined) navigate('/');
     };
 
 
-
+ 
   return (
     <div className='row container-height'>
     <div className='col-lg-6 col-md-6 m-auto'>
@@ -38,28 +50,30 @@ const Register = ({ history }) => {
 
         <form onSubmit={formSubmitHandler}>
           <fieldset>
+
             <div className='form-group'>
-              <label htmlFor='exampleInputEmail1'>FirstName</label>
+              <label htmlFor='first-name'>FirstName</label>
               <input
                 value={firstName}
-                onChange={e => setFirstName(e.target.value)}
                 type='text'
                 className='form-control'
-                id='exampleInputEmail1'
-                aria-describedby='emailHelp'
-                placeholder='Enter Name'
+                id='first-name'
+              aria-describedby='emailHelp'
+                placeholder='Enter firstName'
+                onChange={e => setFirstName(e.target.value)}
               />
             </div>
+
             <div className='form-group'>
-              <label htmlFor='exampleInputEmail1'>LastName</label>
+              <label htmlFor='last-name'>LastName </label>
               <input
                 value={lastName}
-                onChange={e => setLastName(e.target.value)}
+                onChange={(e) => setLastName(e.target.value)}
                 type='text'
                 className='form-control'
-                id='exampleInputEmail1'
-                aria-describedby='emailHelp'
-                placeholder='Enter Name'
+                id='last-name'
+             aria-describedby='emailHelp'
+                placeholder='Enter lasttName'
               />
             </div>
 
@@ -69,11 +83,11 @@ const Register = ({ history }) => {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 type='email'
-                className='form-control'
-                id='exampleInputEmail1'
-                aria-describedby='emailHelp'
-                placeholder='Enter email'
-              />
+                  className='form-control'
+                  id='exampleInputEmail1'
+                  aria-describedby='emailHelp'
+                  placeholder='Enter email'
+                />
             </div>
             <div className='form-group'>
               <label htmlFor='exampleInputPassword1'>Password</label>
@@ -84,20 +98,23 @@ const Register = ({ history }) => {
                 className='form-control'
                 id='exampleInputPassword1'
                 placeholder='Password'
+                autoComplete="true"
               />
             </div>
             <div className='form-group'>
-              <label htmlFor='exampleInputEmail1'>FirstName</label>
-              <input
-                value={role}
-                onChange={e => setRole(e.target.value)}
-                type='text'
-                className='form-control'
-                id='exampleInputEmail1'
-                aria-describedby='emailHelp'
-                placeholder='Enter Name'
-              />
-            </div>
+              <label htmlFor='exampleInputEmail1'>Role</label><br></br>
+              <select
+                          value={role}
+                          onChange={(e) => setRole(e.target.value)}
+                          className='custom-select'>
+                            <option defaultValue='Admin'>
+                            Admin
+                          </option>
+                          <option value='cadre_pedagogique'>Cadre_pedagogique</option>
+                         
+                </select>
+                </div>
+            
             <button type='submit' className='btn btn-info m-auto'>
               Register
             </button>

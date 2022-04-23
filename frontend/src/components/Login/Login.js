@@ -4,6 +4,8 @@ import { login } from '../../redux/action/users/usersActions';
 import ErrorMessage from '../DisplayMessage/ErrorMessage';
 import Loading from '../Loading/Loading';
 
+
+
 const Login = ({ history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,23 +13,23 @@ const Login = ({ history }) => {
   const dispatch = useDispatch();
 
   //Before login in we will check if you have login the we redirect you
+  const state = useSelector(state => {
+    return state.userLogin;
+  });
 
-  const userLoginDetails = useSelector(state => state.userLogin);
+  const { loading, userInfo, error } = state;
 
-  const { loading, userInfo, error } = userLoginDetails;
-  console.log(loading, userInfo, error);
-  //const navigate = useNavigate();
-  useEffect(() => {
-    if (userInfo) {
-      history.push('/register');
-    }
-  }, [dispatch, userInfo, history]);
-  //submit form
   const submitFormHandler = e => {
     e.preventDefault();
+   // console.log(email, password);
     dispatch(login(email, password));
-    
   };
+
+  //Redirect
+  useEffect(() => {
+    if (userInfo) history.push('/profile');
+  }, [state]);
+
 
   return (
     <div className='row container-height'>

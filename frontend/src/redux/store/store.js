@@ -7,9 +7,9 @@ import userUpdateReducer from '../reducer/users/userUpdateReducer';
 import createdArchiveReducer from '../reducer/archives/createdArchiveReducer';
 import archiveListReducer from '../reducer/archives/archiveListReducer';
 import archiveDetailReducer from '../reducer/archives/archiveDetailsReducer';
-import usersListReducer from '../reducer/users/usersListReducer';
+import  usersListReducer  from '../reducer/users/usersListReducer';
 
-const middleware = [thunk];
+const middlewares = [thunk];
 
 const reducer = combineReducers({
   userLogin: userReducer,
@@ -41,7 +41,7 @@ const initialState = {
 const store = createStore(
   reducer,
   initialState,
-  composeWithDevTools(applyMiddleware(...middleware))
+  composeWithDevTools(applyMiddleware(...middlewares))
 );
 
 export default store;

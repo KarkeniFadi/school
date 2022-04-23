@@ -1,77 +1,87 @@
 const express = require('express');
-const expressAsyncHandler = require('express-async-handler');
-const authMiddleware = require('../middlewares/authMiddleware');
+const asynchHandler = require('express-async-handler');
+const jwt = require('jsonwebtoken');
+const authMiddlware = require('../middlewares/authMiddleware');
 const Archive = require('../models/Archive');
-
+const User = require('../models/User');
+const authTokenGenerator = require('../utils/generateToken');
 const archiveRouter = express.Router();
 
-//Create Archive
+//Create Book
 archiveRouter.post(
   '/',
-  expressAsyncHandler(async (req, res) => {
-    const archive = await Archive.create(req.body);
 
-    if (archive) {
+  asynchHandler(async (req, res) => {
+    try {
+      const archive= await Archive.create(req.body);
       res.status(200);
       res.json(archive);
-    } else {
+    } catch (error) {
       res.status(500);
-      throw new Error('Archive creating failed');
+      throw new Error(error);
     }
   })
 );
 
-//Create Archive
 archiveRouter.get(
   '/',
-  expressAsyncHandler(async (req, res) => {
-    const archive = await Archive.find({});
-
-    if (archive) {
-      res.status(200);
-      res.json(archive);
+  asynchHandler(async (req, res) => {
+    const archives = await Archive.find().populate('createdBy').sort('createdAt');
+    //Compare password
+    if (archives) {
+      res.status(201);
+      res.send(archives);
     } else {
-      res.status(500);
-      throw new Error('There are no Archive');
+      res.status(401);
+      throw new Error('Server error');
     }
   })
 );
+
+//Delete book
+
+archiveRouter.delete(
+  '/:id',
+  asynchHandler(async (req, res) => {
+    try {
+      const archive = await Archive.findByIdAndDelete(req.params.id);
+      res.status(200);
+      res.send(archive);
+    } catch (error) {
+      res.status(500);
+      throw new Error('Server Error');
+    }
+  })
+);
+
+//Update
 
 archiveRouter.put(
   '/:id',
-  authMiddleware,
-  expressAsyncHandler(async (req, res) => {
-    const archive = await Archive.findById(req.params.id);
-
-    if (archive) {
-      const updatedArchive = await Archive.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
+  asynchHandler(async (req, res) => {
+    try {
+      const archive= await Archive.findByIdAndUpdate(req.params.id, req.body);
       res.status(200);
-      res.json(updatedArchive);
-    } else {
+      res.json(archive);
+    } catch (error) {
       res.status(500);
       throw new Error('Update failed');
     }
   })
 );
 
-archiveRouter.delete(
+//find a book
+archiveRouter.get(
   '/:id',
-  expressAsyncHandler(async (req, res) => {
+  asynchHandler(async (req, res) => {
     try {
-      const archive = await Archive.findByIdAndDelete(req.params.id);
+      const archive= await Archive.findById(req.params.id);
       res.status(200);
       res.send(archive);
     } catch (error) {
-      res.json(error);
+      res.status(500);
+      throw new Error('No archive found');
     }
   })
 );
-
 module.exports = archiveRouter;
