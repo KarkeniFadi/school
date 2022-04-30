@@ -1,31 +1,29 @@
-const mongoose = require('mongoose');
-
-
+const mongoose = require("mongoose");
 
 const archiveSchema = new mongoose.Schema(
   {
-    
     fullName: {
       type: String,
       required: true,
     },
-     picture: {
-        type: String,
-        //required:true,
-      },
-
-      role: {
-        type: String,
-        enum : ['Student','Teacher','administrative'],
-        default: 'Student'
+    picture: {
+      type: String,
     },
-    
+    description: {
+      type: String,
+    },
+
+    role: {
+      type: String,
+      enum: ["Student", "Teacher", "Admin", "Doc"],
+      default: "Doc",
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Archive = mongoose.model('Archive', archiveSchema);
+const Archive = mongoose.model("Archive", archiveSchema);
 
 module.exports = Archive;
