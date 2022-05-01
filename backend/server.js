@@ -3,8 +3,12 @@ const dotenv = require("dotenv");
 const dbConnect = require("./config/dbConnect"); //ou bien require('./config/dbConnect')();
 const usersRoute = require("./routes/usersRoute");
 const archivesRouter = require("./routes/archivesRoute");
+const imagesRoute = require("./routes/imagesRoute");
+const contactRoute =require('./routes/contactRoute');
 const error = require("./middlewares/errorMiddlewareHandler");
 const cors = require('cors')
+const bodyParser =require('body-parser');
+
 
 dotenv.config();
 
@@ -22,6 +26,18 @@ dbConnect();
 app.use("/api/users", usersRoute);
 //archiveRoutes
 app.use("/api/archives", archivesRouter);
+//addArchiveRoutes
+app.use('/api/addArchive',imagesRoute);
+//contactRoutes
+app.use('/api/contact',contactRoute);
+
+
+
+// parse requests of content-type: application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true}));
+// parse requests of content-type: application/json
+app.use(bodyParser.json());
+
 
 //Error middelware
 app.use(error.errorMiddlewareHandler);
