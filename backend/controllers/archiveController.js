@@ -3,6 +3,7 @@ const generateToken = require("../utils/generateToken");
 
 exports.create = async function (req, res, next) {
   try {
+    console.log(req.body);
     const archive = await Archive.create(req.body);
     if (archive) {
       return res.status(200).json(archive);
@@ -35,6 +36,109 @@ exports.findAll = async function (req, res, next) {
     });
   }
 };
+
+exports.findAllDoc = async function (req, res, next) {
+  try {
+    const archives = await Archive.find({role: 'Doc'}).sort({'createdAt':-1});
+    if (archives) {
+      return res.status(200).json(archives);
+    } else {
+      return res.status(400).send({
+        message: `Server error`,
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      message: `something wrong, ${error}`,
+    });
+  }
+};
+
+exports.findAllDocLimit = async function (req, res, next) {
+  try {
+    const archives = await Archive.find({role: 'Doc'}).sort({'createdAt':-1}).limit(3);
+    if (archives) {
+      return res.status(200).json(archives);
+    } else {
+      return res.status(400).send({
+        message: `Server error`,
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      message: `something wrong, ${error}`,
+    });
+  }
+};
+
+exports.findAllTeacherLimit = async function (req, res, next) {
+  try {
+    const archives = await Archive.find({role: 'Teacher'}).sort({'createdAt':-1}).limit(4);
+    if (archives) {
+      return res.status(200).json(archives);
+    } else {
+      return res.status(400).send({
+        message: `Server error`,
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      message: `something wrong, ${error}`,
+    });
+  }
+};
+
+exports.findAllTeacher = async function (req, res, next) {
+  try {
+    const archives = await Archive.find({role: 'Teacher'}).sort({'createdAt':-1});
+    if (archives) {
+      return res.status(200).json(archives);
+    } else {
+      return res.status(400).send({
+        message: `Server error`,
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      message: `something wrong, ${error}`,
+    });
+  }
+};
+
+exports.findAllAdmin = async function (req, res, next) {
+  try {
+    const archives = await Archive.find({role: 'Admin'}).sort({'createdAt':-1});
+    if (archives) {
+      return res.status(200).json(archives);
+    } else {
+      return res.status(400).send({
+        message: `Server error`,
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      message: `something wrong, ${error}`,
+    });
+  }
+};
+
+exports.findAllStudent = async function (req, res, next) {
+  try {
+    const archives = await Archive.find({role: 'Student'}).sort({'createdAt':-1});
+    if (archives) {
+      return res.status(200).json(archives);
+    } else {
+      return res.status(400).send({
+        message: `Server error`,
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      message: `something wrong, ${error}`,
+    });
+  }
+};
+
 exports.deleteOne = async function (req, res, next) {
   const id = req.params.id;
 
@@ -94,5 +198,21 @@ exports.findOne = (req, res) => {
       res
         .status(500)
         .send({ message: "Error retrieving Archive with id=" + id });
+    });
+};
+
+// Delete All Archives
+exports.deleteAllArchives = (req, res) => {
+  Archive.deleteMany({})
+    .then(data => {
+      res.send({
+        message: `${data.deletedCount} Archives were deleted successfully!`
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all Archives."
+      });
     });
 };

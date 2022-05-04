@@ -4,7 +4,8 @@ const fs =require('fs');
 
 exports.addArchive = async function (req, res, next) {
 
-    try {
+  console.log('--------------------');
+  try {
         if (!req.body.fullName) {
           return res.status(400).send({
             message: "Content can not be empty!",
@@ -13,10 +14,11 @@ exports.addArchive = async function (req, res, next) {
         // Create a Post
         const post = {
           fullName: req.body.fullName,
+          description: req.body.description,
           role: req.body.role,
           picture: req.file.filename,
         };
-    
+    console.log(post);
         // Save post in the database
         Archive.create(post)
           .then((data) => {

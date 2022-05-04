@@ -15,12 +15,12 @@ var storage = multer.diskStorage({
     cb(null, 'uploads')
   },
   filename:function (req, file, cb) {
-    //console.log(file);
-    cb(null,  Date.now()+`user_${file.originalname}` );
+    console.log(file);
+    cb(null,  Date.now()+`archi_${file.originalname}` );
   },
   
   fileFilter: (req, file, callBack)=> {
-    //console.log(file);
+    console.log(file);
     if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
         return callBack(new Error('Please upload an image'))
     }
